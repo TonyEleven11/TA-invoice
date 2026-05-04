@@ -6,6 +6,7 @@
 <title>Tiger Antennas — Invoice Generator</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
   body { font-family: Arial, sans-serif; background: #f4f4f4; color: #222; }
 
   #app { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
@@ -15,13 +16,13 @@
   .card h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: 14px; }
   .field { margin-bottom: 12px; }
   .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; color: #444; }
-  .field input, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background: #fafafa; }
+  .field input, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; background: #fafafa; -webkit-appearance: none; appearance: none; font-family: inherit; }
   .field textarea { min-height: 60px; resize: vertical; }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-  .line-header { display: grid; grid-template-columns: 1fr 70px 90px 32px; gap: 8px; font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; padding: 0 2px; }
-  .line-item { display: grid; grid-template-columns: 1fr 70px 90px 32px; gap: 8px; align-items: center; margin-bottom: 8px; }
-  .line-item input { padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; width: 100%; background: #fafafa; }
+  .line-header { display: grid; grid-template-columns: 1fr 60px 80px 28px; gap: 6px; font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; padding: 0 2px; }
+  .line-item { display: grid; grid-template-columns: 1fr 60px 80px 28px; gap: 6px; align-items: center; margin-bottom: 8px; }
+  .line-item input { padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; width: 100%; min-width: 0; background: #fafafa; -webkit-appearance: none; appearance: none; font-family: inherit; }
   .li-qty, .li-price { text-align: right; }
   .del-line { background: none; border: none; font-size: 20px; color: #ccc; cursor: pointer; width: 32px; text-align: center; line-height: 1; }
   .del-line:hover { color: #e55; }
@@ -77,6 +78,38 @@
   .inv-notes { font-size: 12px; color: #555; background: #f9f9f9; border-radius: 6px; padding: 10px 14px; border-left: 3px solid #e07b00; margin-bottom: 20px; }
   .inv-footer { text-align: center; font-size: 13px; color: #e07b00; font-weight: 700; border-top: 1px solid #eee; padding-top: 16px; letter-spacing: 0.02em; }
   .print-btn-row { display: flex; gap: 12px; margin-top: 16px; }
+
+  /* Phone-specific layout fixes */
+  @media (max-width: 480px) {
+    #app { padding: 16px 12px; }
+    .card { padding: 16px; }
+    /* Description gets its own row; qty / price / delete sit underneath together */
+    .line-header { display: none; }
+    .line-item {
+      grid-template-columns: 1fr 1fr 32px;
+      grid-template-areas:
+        "desc desc desc"
+        "qty  price del";
+      gap: 6px 8px;
+      padding: 10px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      background: #fafafa;
+      margin-bottom: 10px;
+    }
+    .line-item input { background: #fff; }
+    .line-item input[data-role="desc"]  { grid-area: desc; }
+    .line-item input[data-role="qty"]   { grid-area: qty; }
+    .line-item input[data-role="price"] { grid-area: price; }
+    .line-item .del-line { grid-area: del; }
+    #invoice { padding: 20px; }
+    .inv-header { flex-direction: column; gap: 12px; }
+    .inv-biz { text-align: left; }
+    .inv-meta p { text-align: left; }
+    .inv-title-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+    table.items thead th, table.items tbody td { padding: 7px 8px; font-size: 12px; }
+    .pay-btn { font-size: 13px; padding: 10px 6px; }
+  }
 
   @media print {
     #app, .back-btn, .print-btn-row { display: none !important; }
